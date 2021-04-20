@@ -1,4 +1,11 @@
-(setq l' (x x y x x x y x x z x x a)) ;| TODO ADD FILE IO |;
+(defun demo()
+    (setq fp (open "theString.txt" :direction :input))
+    (setq here (read fp "done"))
+    (princ "processing")
+    (princ here)
+    (begin here)
+)
+
 (setq x' (x x))
 (setq y' (y y))
 (setq z' (z z))
@@ -47,8 +54,5 @@
 
 
 
-(defun run()
-    (begin l)
-)
 
 
