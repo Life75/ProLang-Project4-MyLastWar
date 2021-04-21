@@ -123,5 +123,31 @@ transitionsList = createTransitions(fmaData.getStateTransitions())
 stateList = createStatesList(fmaData.getAmountOfStates())
 stateList = placingData(transitionsList, stateList)
 
+def checkLegalAcceptState(currentState):
+    
+    for acceptState in fmaData.getAcceptState():
+        if int(currentState.getState()) == int(acceptState):
+            return True
+    return False 
+
 def generateLispCode():
+    fileHere = open("part2.lsp", "a")
+    fileHere.write("(defun demo() \n (setq fp (open \"theString.txt\" :direction :input)) \n(setq here (read fp \"done\")) \n(princ \"processing\") \n(princ here)\n (state0 here)\n )\n")
+    fileHere.write("\n")
+    for alphabet in fmaData.getAlphabet():
+        fileHere.write("(setq " + alphabet + "' (" + alphabet + " " + alphabet + "))\n")
+    
+    fileHere.write("\n")
+    for state in stateList:
+        fileHere.write("(defun state"+str(state.getState())+"(list)\n")
+
+        if(checkLegalAcceptState(state)):
+            fileHere.write("(COND ((null list) T)\n")
+        else: 
+            fileHere.write("(COND ((null list) nil)\n")
+    #    for transition in stateList
+
+    fileHere.close()
     return 
+
+generateLispCode()
