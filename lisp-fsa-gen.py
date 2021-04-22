@@ -130,6 +130,12 @@ def checkLegalAcceptState(currentState):
             return True
     return False 
 
+def loopsIntoSelf(transition):
+    if transition.getStart() == transition.getFinish():
+        return True
+    else: 
+        return False
+
 def generateLispCode():
     fileHere = open("part2.lsp", "a")
     fileHere.write("(defun demo() \n (setq fp (open \"theString.txt\" :direction :input)) \n(setq here (read fp \"done\")) \n(princ \"processing\") \n(princ here)\n (state0 here)\n )\n")
@@ -137,17 +143,25 @@ def generateLispCode():
     for alphabet in fmaData.getAlphabet():
         fileHere.write("(setq " + alphabet + "' (" + alphabet + " " + alphabet + "))\n")
     
-    fileHere.write("\n")
+    
     for state in stateList:
+        fileHere.write("\n")
         fileHere.write("(defun state"+str(state.getState())+"(list)\n")
 
-        if(checkLegalAcceptState(state)):
+        if checkLegalAcceptState(state):
             fileHere.write("(COND ((null list) T)\n")
         else: 
             fileHere.write("(COND ((null list) nil)\n")
-    #    for transition in stateList
+        
+        #fileHere.write("\n")
+        for transition in state.getTransitions():
+            fileHere.write("((EQUAL (car list) (car " + str(transition.getKey())+")) (state"+ str(transition.getFinish()) +"(cdr list)))\n")
 
-    fileHere.close()
-    return 
+        fileHere.write("\n(t nil)\n))")
+        fileHere.write("\n")
+        
+
+
 
 generateLispCode()
+
